@@ -1,0 +1,16 @@
+.text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.text__content {
+    color: var(--white);
+    font-size: 6.5rem;
+    text-align: center;
+    padding: 2rem 4rem;
+}
+
+.text__icon{
+    padding-left: 3rem;
+}

@@ -1,0 +1,6 @@
+.menuButton {
+    position: relative;
+    background-color: var(--background-primary);
+    border: none;
+    cursor: pointer;
+}

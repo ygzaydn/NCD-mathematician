@@ -1,0 +1,30 @@
+.answerButton {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    height: 20rem;
+    width: 20rem;
+}
+
+.answerButton1 {
+    top:10%;
+    left:10%;
+}
+
+.answerButton2 {
+    top:40%;
+    right:20%;
+}
+
+.answerButton3 {
+    top:70%;
+    left:20%;
+}
+
+.answerButton:enabled .answerButton{
+background-color: red;
+}
+.chosenAnswer > svg > path, .chosenAnswer > svg > text {
+    fill: black !important
+}
+

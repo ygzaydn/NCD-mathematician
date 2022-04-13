@@ -1,0 +1,20 @@
+.menuCircle{
+    transition: var(--transition);
+    margin: 6rem 0;
+    font-family: 'Handlee', cursive;
+}
+
+.menuCircle:hover {
+    filter: var(--filter)
+}
+
+.answerCircle {
+    max-width: 15vw;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.answerCircle:hover {
+    filter: var(--filter)
+}
+

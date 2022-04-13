@@ -1,0 +1,15 @@
+.resultpage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.resultpage__leftgrid, .resultpage__rightgrid {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}

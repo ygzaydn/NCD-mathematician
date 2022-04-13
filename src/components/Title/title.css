@@ -1,0 +1,15 @@
+.title {
+    padding: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title__text {
+    color: var(--red);
+    font-size: 8.5rem;
+    text-align: center;
+    padding: 2rem 0;
+    display: ruby;
+}
