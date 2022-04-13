@@ -7,7 +7,6 @@ const initialState = {
         correct: 0,
     },
     score: 0,
-    tour: 0,
     summary: [],
 };
 
@@ -39,7 +38,6 @@ export const ScoreContextProvider = ({ children }) => {
         const dataToWrite = {
             ...data,
             score: data.score + item.score,
-            tour: data.tour + item.tour,
             question: {
                 total: data.question.total + item.question.total,
                 correct: data.question.correct + item.question.correct,

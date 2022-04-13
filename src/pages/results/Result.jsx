@@ -6,15 +6,14 @@ import { useNavigate } from 'react-router';
 import './result.css';
 
 const Game = () => {
-    const { writeLocalhost, information, setInformation } = getContext();
+    const { writeLocalhost, information } = getContext();
     const navigate = useNavigate();
     useEffect(() => {
         writeLocalhost(information);
     }, []);
 
     const restartPage = () => {
-        setInformation({ ...information, tour: information.tour + 1 });
-        navigate('/game');
+        navigate('/');
     };
 
     return (

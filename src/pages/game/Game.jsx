@@ -27,7 +27,6 @@ const Game = () => {
                 correct: 0,
             },
             score: 0,
-            tour: 1,
             summary: [],
         });
     }, []);
@@ -121,7 +120,6 @@ const Game = () => {
             </div>
             <div className="gamepage__upper">
                 <Text content={`Score: ${information.score}`} size="4rem" />
-                <Text content={`Tour: ${information.tour}`} size="4rem" />
                 <Text
                     content={`Questions: ${information.question.correct}/${information.question.total}`}
                     size="4rem"
