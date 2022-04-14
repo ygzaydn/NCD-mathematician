@@ -1,0 +1,209 @@
+npm i near-sdk-as --save-dev
+near login
+near state <account_name>
+npm run buildNear:release
+make directory neardev
+	dev-account -> nerdkrypto.testnet
+	dev-account.env -> CONTRACT_NAME=nerdkrypto.testnet
+near dev-deploy ./build/release/simple.wasm 
+
+
+// return the string 'hello world'
+export function helloWorld(names: Array<string>): string {
+    return names.map<string>((name) => "hello " + name).join(" ");
+}
+
+near view nerdkrypto.testnet helloWorld '{"names": ["ASd", "dsadasd"]}'
+
+
+export function read(key: string): string {
+    if (storage.hasKey(key)) {
+        return `✅ Key [ ${key} ] has value [ ${storage.getString(key)!} ]`;
+    } else {
+        return `🚫 Key [ ${key} ] not found in storage. ( ${storageReport()} )`;
+    }
+}
+
+near view nerdkrypto.testnet read '{"asd"}'
+
+---
+Assert
+
+AssemblyScript provides a rich environment including an assert function to improve the quality of your code, among others. This is a specific set of functions that throw an error if something unexpected happens. They’re called “assertion” functions.
+
+assert<T>(isTrueish: T, message?: string): T
+
+// usage
+let output: i8 = 1;
+assert(output == 1, "The value of output is not 1");
+---
+
+Models
+
+At the most basic level, a model is a custom data container that defines a new type not currently available (as opposed to primitive types like integers, strings and bool which are always available)
+
+@nearBindgen
+export class TextMessage {
+  sender: string;
+  text: string;
+  number: u64;
+  isRead: bool;
+}
+// see https://github.com/near/near-sdk-as/blob/master/assembly/__tests__/runtime/model.ts
+
+@nearBindgen is a decorator made for the serialization of custom classes before they are saved to storage onto the blockchain. @nearBindgen does not support class inheritance.
+
+Models can build on top of one another as with the sample below, taken from CryptoCorgis (like Pokemon), which includes 3 models:
+
+    CorgiMetaData which wraps an array of strings
+    the Corgi model which includes strings, an integer and also uses CorgiMetaData
+    and finally a CorgiArray which includes an array of Corgis and maintains the length of that array as well
+
+@nearBindgen
+export class CorgiMetaData {
+  dna: Array<string>;
+}
+
+export class Corgi {
+  owner: string;
+  sender: string;
+  message: string;
+  dna: string;
+  name: string;
+  color: string;
+  backgroundColor: string;
+  rate: string;
+  sausage: string;
+  quote: string;
+  level: i32;
+  metadata: CorgiMetaData;
+}
+
+export class CorgiArray {
+  corgis: Array<Corgi>;
+  len: i32;
+}
+// see https://github.com/nearprotocol/corgis/blob/master/assembly/model.ts
+
+Since models are just AssemblyScript classes, they support custom constructors and behavior, not just data, as with the example here:
+
+@nearBindgen
+export class Greeter {
+  text: string;
+
+  constructor(text: string) {
+    this.text = text;
+  }
+
+  greet(userId: string): string {
+    return "Hello, " + userId;
+  }
+}
+// see https://github.com/nearprotocol/blockbuster/blob/master/assembly/model.ts
+
+---
+
+Context
+
+Contracts can import the blockchain context from near-sdk-as. How to import context from near-sdk-as?
+
+import { context } from "near-sdk-as";
+
+// contract code below this line can now make use of the context object
+
+This object provides context for contract execution including information about the transaction sender, blockchain height, and attached deposit available for use during contract execution, etc. The snippet below is the complete interface as currently implemented.
+
+// REFERENCE ONLY
+// interface provided by the context object imported above
+
+class Context {
+  // Context API
+  get sender(): string; // account ID that signed the original transaction that led to this execution (aka. signer account id)
+  get contractName(): string; // account ID of current contract being executed (aka. current account id)
+  get blockIndex(): u64; // current block index (aka. height)
+  get storageUsage(): u64; // contract account storage usage before the contract execution
+
+  // Economics API
+  get attachedDeposit(): u128; // balance that was attached to the call that will be immediately deposited before the contract execution starts.
+  get accountBalance(): u128; // balance attached to the given account. Excludes the `attachedDeposit` that was attached to the transaction.
+  get prepaidGas(): u64; // gas attached to the call and available to pay for the gas fees
+  get usedGas(): u64; // gas that was irreversibly used for contract execution (aka. burnt gas) + gas attached to any promises (cannot exceed prepaidGas)
+}
+
+---
+
+import { storage } from "near-sdk-as";
+// contract code below this line can now make use of the storage object
+
+The complete interface for the Storage class is provided by the snippet below with inline comments.
+
+// REFERENCE ONLY
+// this is the interface provided by the storage object
+
+class Storage {
+  // read and write text to storage
+  setString(key: string, value: string): void;
+  getString(key: string): string | null;
+
+  // read and write an array of bytes to storage
+  setBytes(key: string, value: Uint8Array): void;
+  getBytes(key: string): Uint8Array | null;
+
+  // check whether a key exists
+  contains(key: string): bool;
+  hasKey(key: string): bool; // alias for contains()
+
+  // delete a key from storage
+  delete(key: string): void;
+
+  // get string and data objects defined in model.ts
+  // return defaultValue if key not found
+  // (prefer getPrimitive<T> for bool or integer and getSome<T> if key is known to exist)
+  set<T>(key: string, value: T): void;
+  get<T>(key: string, defaultValue: T | null = null): T | null;
+
+  // get bool or integer value stored under the key
+  // return defaultValue if key not found
+  // throw if any other type (use get<T>)
+  // (prefer get<T> for string or data objects defined in model.ts and getSome<T> if key is known to exist)
+  getPrimitive<T>(key: string, defaultValue: T): T;
+
+  // get bool, integer, string and data objects defined in model.ts
+  // throw if key not found
+  // (prefer get<T> for string or data objects defined in model.ts and getPrimitive<T> for bool or integer)
+  getSome<T>(key: string): T;
+}
+
+---
+
+
+near call $CONTRACT helloWorld --accountId <YOUR_ACCOUNT>.testnet
+
+
+---
+folderStructure
+
+-	there are 2 main folders
+	-	assembly contains the smart contracts and tests
+	-	src contains the applications UX and tests
+-	there is another folder to be aware of
+	-	neardev contains contract account details
+
+contract data model: assembly/model.ts
+@nearBindgen altına modelimizi class olarak tanımlıyoruz.
+context.attachedDeposit;
+context.sender;
+
+main.ts'de model'i import ediyoruz ve contract'ları teker teker export fonksiyonua yazıyoruz.
+
+---
+
+---
+on frontend we have src/config.js. data and endpoints required to connect to the near network, connection information is included for mainnet testnet and betanet as well as the default localnet configuration.
+
+at index.js file we configure connection to NEAR network, we configure contract interface by injecting wallet connection and wiring up both contract methods.
+
+contract.getMessages().then(messages => {
+	setMessages(messages)
+}
+

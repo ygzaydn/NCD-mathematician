@@ -1,0 +1,6 @@
+{
+  "workspaces": [
+    "assembly/simple",
+    "assembly/singleton"
+  ]
+}

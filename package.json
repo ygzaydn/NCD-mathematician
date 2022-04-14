@@ -18,7 +18,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "watch -d -n 1 'clear && yarn test'",
+    "testNear": "yarn asp -f unit.spec",
+    "clean": "rm -rf ./build && rm -rf ./neardev",
+    "buildNear": "asb --target debug",
+    "buildNear:release": "asb",
+    "asp": "asp --verbose --nologo"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +53,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
+    "near-sdk-as": "^3.2.3",
     "prettier": "^2.6.2"
   }
 }
