@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import "./menuButton.css";
-import { MenuCircle } from "../../icons";
+import './menuButton.css';
+import { MenuCircle } from '../../icons';
 
 const MenuButton = ({ text, clickFunc }) => (
     <div className="menuButton">

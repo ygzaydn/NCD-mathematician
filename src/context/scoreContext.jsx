@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 const initialState = {
     question: {
@@ -15,26 +14,26 @@ export const ScoreContext = React.createContext(null);
 
 export const ScoreContextProvider = ({ children }) => {
     const [information, setInformation] = useState(initialState);
-    const [difficulty, setDifficulty] = useState({ name: "Easy", value: 0 });
+    const [difficulty, setDifficulty] = useState({ name: 'Easy', value: 0 });
     useEffect(() => {
-        const storage = JSON.parse(localStorage.getItem("scoretable"));
+        const storage = JSON.parse(localStorage.getItem('scoretable'));
         if (!storage) {
             localStorage.setItem(
-                "scoretable",
+                'scoretable',
                 JSON.stringify({ ...initialState })
             );
         }
     }, []);
 
     const readLocalhost = () => {
-        const data = localStorage.getItem("scoretable");
+        const data = localStorage.getItem('scoretable');
         if (data) {
             return JSON.parse(data);
         } else return initialState;
     };
 
     const writeLocalhost = (item) => {
-        const data = JSON.parse(localStorage.getItem("scoretable"));
+        const data = JSON.parse(localStorage.getItem('scoretable'));
 
         const dataToWrite = {
             ...data,
@@ -45,7 +44,7 @@ export const ScoreContextProvider = ({ children }) => {
             },
             summary: [...item.summary],
         };
-        localStorage.setItem("scoretable", JSON.stringify(dataToWrite));
+        localStorage.setItem('scoretable', JSON.stringify(dataToWrite));
     };
 
     const shuffleArray = (array) => {

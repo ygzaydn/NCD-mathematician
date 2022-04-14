@@ -1,9 +1,10 @@
-import React from "react";
-import { Title, MenuButton, Text } from "../../components/";
-import { useNavigate } from "react-router";
-import { getContext } from "../../context/scoreContext";
+import React from 'react';
+import { Title, MenuButton, Text } from '../../components/';
+import { useNavigate } from 'react-router';
+import { getContext } from '../../context/scoreContext';
+import PropTypes from 'prop-types';
 
-import "./home.css";
+import './home.css';
 
 const Home = ({ wallet, nearConfig, contract, currentUser }) => {
     const {
@@ -14,9 +15,9 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
         wallet.requestSignIn(
             {
                 contractId: nearConfig.contractName,
-                methodNames: [contract.addMessage.name],
+                methodNames: [contract.predecessor],
             }, //contract requesting access
-            "NEAR Mathematician",
+            'NEAR Mathematician',
             null,
             null
         );
@@ -24,8 +25,8 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
 
     const startGame = async () => {
         if (currentUser?.accountId) {
-            await contract.enterGame();
-            navigate("/game");
+            await contract.predecessor();
+            navigate('/game');
         } else {
             await signIn();
         }
@@ -47,7 +48,7 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
                 />
             )}
             <MenuButton
-                text={currentUser?.accountId ? "Start" : "Click your wallet"}
+                text={currentUser?.accountId ? 'Start' : 'Connect wallet'}
                 clickFunc={() => startGame()}
             />
             <Text content="How to play?" size="3rem" />
@@ -57,6 +58,13 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
             />
         </div>
     );
+};
+
+Home.propTypes = {
+    contract: PropTypes.any,
+    currentUser: PropTypes.any,
+    nearConfig: PropTypes.any,
+    wallet: PropTypes.any,
 };
 
 export default Home;

@@ -1,10 +1,5 @@
 import { storage, u128, context, logging } from "near-sdk-as";
-import { EntryTicket, tickets } from "./model";
 
-export function enterGame(): string {
-    const sender = context.sender;
-    return sender + " will enter game";
-}
 
 // let amount: u128 = 1_000_000_000_000_000_000_000_000; // 1 $NEAR as yoctoNEAR
 // return the string 'hello world'

@@ -1,18 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./styles/index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+/* eslint-disable no-undef */
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './styles/index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-import getConfig from "./config.js";
-import * as nearAPI from "near-api-js";
+import getConfig from './config.js';
+import * as nearAPI from 'near-api-js';
 
-window.Buffer = window.Buffer || require("buffer").Buffer;
+window.Buffer = window.Buffer || require('buffer').Buffer;
 
 async function initContract() {
     // get network configuration values from config.js
     // based on the network ID we pass to getConfig()
-    const nearConfig = getConfig("testnet");
+    const nearConfig = getConfig('testnet');
 
     // create a keyStore for signing transactions using the user's key
     // which is located in the browser local storage after user logs in
@@ -45,7 +46,7 @@ async function initContract() {
         nearConfig.contractName,
         {
             // View methods are read-only – they don't modify the state, but usually return some value
-            viewMethods: ["enterGame"],
+            viewMethods: ['predecessor'],
             // Change methods can modify the state, but you don't receive the returned value when called
             changeMethods: [],
             // Sender is the account ID to initialize transactions.
@@ -66,7 +67,7 @@ window.nearInitPromise = initContract().then(
                 nearConfig={nearConfig}
                 wallet={walletConnection}
             />,
-            document.getElementById("root")
+            document.getElementById('root')
         );
     }
 );
