@@ -16,10 +16,11 @@ const Game = () => {
 
     const navigate = useNavigate();
 
-    const { generateQuestion, generateAnswers, setInformation, information } =
+    const { generateQuestion, generateAnswers, setInformation, information, difficulty: {name} } =
         getContext();
 
     useEffect(() => {
+      
         setQuestion(generateQuestion());
         setInformation({
             question: {
@@ -31,25 +32,31 @@ const Game = () => {
         });
     }, []);
 
+    let myTimeout;
     useEffect(() => {
-        if (turn === 11) {
+        console.log(turn >= 11);
+        if (turn >= 11) {
             navigate('/result');
         }
-        setQuestion(generateQuestion());
+        myTimeout = setTimeout(() => answer(0),3000);
+        setQuestion(generateQuestion());  
+        return () => clearTimeout(myTimeout);
     }, [turn]);
 
     useEffect(() => {
         if (question[0] && question[1]) {
             setAnswers(generateAnswers(question));
         }
+        
     }, [question]);
+
 
     const answerChecker = (answer) => {
         return answer === question[0] * question[1];
     };
 
     const answer = (answer) => {
-        setDisabled(true);
+        clearTimeout(myTimeout);
         const gridInfo = gridRef.current;
         const dialogInfo = dialogRef.current;
         dialogInfo.style.visibility = 'visible';
@@ -98,10 +105,13 @@ const Game = () => {
         }, 3000);
     };
 
+    
+
     return (
         <section ref={gridRef} className="gamepage">
+            <span className="difficulty-span">Difficulty: {name}</span>
             <div ref={dialogRef} className="gamepage__dialog">
-                {turn !== 10 ? (
+                {turn < 10 ? (
                     <>
                         {correct ? 'Correct ' : 'Wrong '} answer, new question
                         will appear in 3seconds!

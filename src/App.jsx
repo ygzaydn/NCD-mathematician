@@ -7,6 +7,7 @@ import { ScoreContextProvider } from './context/scoreContext';
 import PropTypes from 'prop-types';
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
+
     return (
         <div>
             <BrowserRouter>

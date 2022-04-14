@@ -7,4 +7,14 @@
     max-width: 1440px;
     margin:auto;
     padding: 0 1rem;
+    position:relative;
+}
+
+.homepage-logout{
+    position:absolute;
+    top:5rem;
+    right:1rem;
+    color:white;
+    font-size:3.5rem;
+    cursor:pointer;
 }

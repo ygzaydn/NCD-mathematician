@@ -3,6 +3,7 @@
     justify-content: center;
     flex-direction: column;
     height: 100vh;
+    position:relative;
 }
 
 .gamepage__dialog {
@@ -70,6 +71,14 @@
     position: relative;
 }
 
+.difficulty-span{
+    position:absolute;
+    top:3rem;
+    right:10rem;
+    color:white;
+    font-size:3.5rem;
+    
+}
 
 @keyframes correctAnswer {
     0% {background-color: var(--background-primary);}
