@@ -1,6 +1,6 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "nerdkrypto.testnet";
+const CONTRACT_NAME = "nerdkrypto.testnet";
 
-export const getConfig = (env) => {
+function getConfig(env) {
     switch (env) {
         case "mainnet":
             return {
@@ -58,4 +58,6 @@ export const getConfig = (env) => {
                 `Unconfigured environment '${env}'. Can be configured in src/config.js.`
             );
     }
-};
+}
+
+module.exports = getConfig;

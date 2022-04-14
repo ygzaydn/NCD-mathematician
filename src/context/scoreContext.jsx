@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useState, useEffect, useContext } from "react";
+import PropTypes from "prop-types";
 
 const initialState = {
     question: {
@@ -14,26 +15,26 @@ export const ScoreContext = React.createContext(null);
 
 export const ScoreContextProvider = ({ children }) => {
     const [information, setInformation] = useState(initialState);
-
+    const [difficulty, setDifficulty] = useState({ name: "Easy", value: 0 });
     useEffect(() => {
-        const storage = JSON.parse(localStorage.getItem('scoretable'));
+        const storage = JSON.parse(localStorage.getItem("scoretable"));
         if (!storage) {
             localStorage.setItem(
-                'scoretable',
+                "scoretable",
                 JSON.stringify({ ...initialState })
             );
         }
     }, []);
 
     const readLocalhost = () => {
-        const data = localStorage.getItem('scoretable');
+        const data = localStorage.getItem("scoretable");
         if (data) {
             return JSON.parse(data);
         } else return initialState;
     };
 
     const writeLocalhost = (item) => {
-        const data = JSON.parse(localStorage.getItem('scoretable'));
+        const data = JSON.parse(localStorage.getItem("scoretable"));
 
         const dataToWrite = {
             ...data,
@@ -44,7 +45,7 @@ export const ScoreContextProvider = ({ children }) => {
             },
             summary: [...item.summary],
         };
-        localStorage.setItem('scoretable', JSON.stringify(dataToWrite));
+        localStorage.setItem("scoretable", JSON.stringify(dataToWrite));
     };
 
     const shuffleArray = (array) => {
@@ -52,7 +53,7 @@ export const ScoreContextProvider = ({ children }) => {
             randomIndex;
 
         // While there remain elements to shuffle...
-        while (currentIndex != 0) {
+        while (currentIndex !== 0) {
             // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex--;
@@ -68,8 +69,12 @@ export const ScoreContextProvider = ({ children }) => {
     };
 
     const generateQuestion = () => {
-        let firstNumber = parseInt(Math.random() * 10);
-        let secondNumber = parseInt(Math.random() * 10);
+        let firstNumber =
+            parseInt(Math.random() * 10) *
+            parseInt(Math.random() * 10 * difficulty.value);
+        let secondNumber =
+            parseInt(Math.random() * 10) *
+            parseInt(Math.random() * 10 * difficulty.value);
         if (!firstNumber) {
             firstNumber++;
         }
@@ -96,6 +101,8 @@ export const ScoreContextProvider = ({ children }) => {
 
     const value = {
         information,
+        difficulty,
+        setDifficulty,
         setInformation,
         readLocalhost,
         writeLocalhost,

@@ -1,5 +1,12 @@
-import { storage, Context } from "near-sdk-as";
+import { storage, u128, context, logging } from "near-sdk-as";
+import { EntryTicket, tickets } from "./model";
 
+export function enterGame(): string {
+    const sender = context.sender;
+    return sender + " will enter game";
+}
+
+// let amount: u128 = 1_000_000_000_000_000_000_000_000; // 1 $NEAR as yoctoNEAR
 // return the string 'hello world'
 export function helloWorld(names: Array<string>): string {
     return names.map<string>((name) => "hello " + name).join(" ");
@@ -22,11 +29,11 @@ export function write(key: string, value: string): string {
 
 // return predecessor
 export function predecessor(): string {
-    const predecessor = Context.predecessor;
+    const predecessor = context.predecessor;
     return "hello " + predecessor;
 }
 
 // private helper method used by read() and write() above
 function storageReport(): string {
-    return `storage [ ${Context.storageUsage} bytes ]`;
+    return `storage [ ${context.storageUsage} bytes ]`;
 }

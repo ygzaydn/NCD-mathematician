@@ -1,4 +1,4 @@
-import * as contract from "../assembly";
+import * as contract from "../main";
 
 describe("Contract", () => {
     // VIEW method tests

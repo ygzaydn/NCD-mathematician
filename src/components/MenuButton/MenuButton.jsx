@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import './menuButton.css';
-import { MenuCircle } from '../../icons';
+import "./menuButton.css";
+import { MenuCircle } from "../../icons";
 
 const MenuButton = ({ text, clickFunc }) => (
     <div className="menuButton">
@@ -19,7 +19,7 @@ const MenuButton = ({ text, clickFunc }) => (
 
 MenuButton.propTypes = {
     text: PropTypes.string,
-    clickFunc: PropTypes.clickFunc,
+    clickFunc: PropTypes.func,
 };
 
 export default MenuButton;
