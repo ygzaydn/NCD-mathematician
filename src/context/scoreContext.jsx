@@ -70,10 +70,10 @@ export const ScoreContextProvider = ({ children }) => {
     const generateQuestion = () => {
         let firstNumber =
             parseInt(Math.random() * 10) *
-            parseInt(Math.random() * 10 * difficulty.value);
+            parseInt(Math.random() * 10 * (1 + difficulty.value));
         let secondNumber =
             parseInt(Math.random() * 10) *
-            parseInt(Math.random() * 10 * difficulty.value);
+            parseInt(Math.random() * 10 * (1 + difficulty.value));
         if (!firstNumber) {
             firstNumber++;
         }

@@ -16,11 +16,15 @@ const Game = () => {
 
     const navigate = useNavigate();
 
-    const { generateQuestion, generateAnswers, setInformation, information, difficulty: {name} } =
-        getContext();
+    const {
+        generateQuestion,
+        generateAnswers,
+        setInformation,
+        information,
+        difficulty: { name },
+    } = getContext();
 
     useEffect(() => {
-      
         setQuestion(generateQuestion());
         setInformation({
             question: {
@@ -32,31 +36,26 @@ const Game = () => {
         });
     }, []);
 
-    let myTimeout;
     useEffect(() => {
-        console.log(turn >= 11);
         if (turn >= 11) {
             navigate('/result');
         }
-        myTimeout = setTimeout(() => answer(0),3000);
-        setQuestion(generateQuestion());  
-        return () => clearTimeout(myTimeout);
+
+        setQuestion(generateQuestion());
     }, [turn]);
 
     useEffect(() => {
         if (question[0] && question[1]) {
             setAnswers(generateAnswers(question));
+            console.log('asd');
         }
-        
     }, [question]);
-
 
     const answerChecker = (answer) => {
         return answer === question[0] * question[1];
     };
 
     const answer = (answer) => {
-        clearTimeout(myTimeout);
         const gridInfo = gridRef.current;
         const dialogInfo = dialogRef.current;
         dialogInfo.style.visibility = 'visible';
@@ -104,8 +103,6 @@ const Game = () => {
             setDisabled(false);
         }, 3000);
     };
-
-    
 
     return (
         <section ref={gridRef} className="gamepage">
