@@ -3,10 +3,18 @@ import { Title, MenuButton, Text } from '../../components/';
 import { useNavigate } from 'react-router';
 import { getContext } from '../../context/scoreContext';
 import PropTypes from 'prop-types';
+import Big from 'big.js';
 
 import './home.css';
 
 const DIVIDER = 1000000000000000000000000;
+const ATTACHED_GAS = Big(1)
+    .times(10 ** 14)
+    .times(3)
+    .toFixed(); // NEAR --> 10k picoNEAR conversion
+const ATTACHED_TOKENS = Big(1)
+    .times(10 ** 24)
+    .toFixed(); // NEAR --> yoctoNEAR conversion
 
 const Home = ({ wallet, nearConfig, contract, currentUser }) => {
     const {
@@ -36,8 +44,6 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
 
     const startGame = async () => {
         if (currentUser?.accountId) {
-            const res = await contract.sayHi();
-            console.log(res);
             let initializationResult = await contract.initCheck({
                 user: currentUser.accountId,
             });
@@ -47,15 +53,13 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
                     user: currentUser.accountId,
                 });
             }
-            const ticket = await contract.getTicket();
-            if (ticket) {
-                navigate('/game');
-            }
+            await contract.getTicket({}, ATTACHED_GAS, ATTACHED_TOKENS);
+            navigate('/game');
         } else {
             await signIn();
         }
     };
-
+    console.log(currentUser);
     const toggleDifficulty = () => {
         if (name === 'Easy') {
             setDifficulty({ name: 'Medium', value: 1 });
@@ -67,8 +71,6 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
             setDifficulty({ name: 'Easy', value: 0 });
         }
     };
-
-    console.log(currentUser);
 
     return (
         <div className="homepage">

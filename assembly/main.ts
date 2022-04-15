@@ -6,6 +6,7 @@ import {
     u128,
     ContractPromiseBatch,
     ContractPromise,
+    VMContext
 } from 'near-sdk-as';
 
 const BASIC_GAS = 5000000000000;
@@ -38,7 +39,7 @@ export function initCheck(user: string): string | null {
     return storage.get<string>(user);
 }
 
-function xcc__high_level__function_call(
+export function function_call(
     remote_account: string,
     remote_method: string,
     remote_method_args: string
@@ -55,12 +56,13 @@ function xcc__high_level__function_call(
 }
 
 export function getTicket(): boolean {
+    
     logging.log(
         'transfer from: ' +
             context.sender +
             ' to: ' +
             context.contractName +
-            ' amount: 1 NEAR '
+            ' amount: ' + context.attachedDeposit.toString() +' NEAR '
     );
     const fromAmount = getBalance(context.sender);
     const price = u128.from('10000000000000000000000');
@@ -69,21 +71,12 @@ export function getTicket(): boolean {
         fromAmount >= price,
         'user does not have enough near to participate game'
     );
-
-    xcc__high_level__function_call(context.contractName, 'getTicket', '');
-
-    /*functionCall(
-        'getTicket',
-        [null],
-        BASIC_GAS,
-        u128.from('10000000000000000000000')
-    );*/
-
+  
     ContractPromiseBatch.create(context.contractName).transfer(
         context.attachedDeposit
     );
-    //createTransaction(context.sender,,"nerdkrypto.testnet",)
-    balances.set(context.sender, u128.sub(fromAmount, price));
 
+    balances.set(context.sender, u128.sub(fromAmount, price));
+    storage.set(context.sender, 'payment completed');
     return true;
 }
