@@ -3,13 +3,36 @@ import React, { useEffect } from 'react';
 import { Text, Title, MenuButton } from '../../components';
 import { getContext } from '../../context/scoreContext';
 import { useNavigate } from 'react-router';
+import PropTypes from 'prop-types';
+import Big from 'big.js';
 import './result.css';
 
-const Game = () => {
+const ATTACHED_GAS = Big(1)
+    .times(10 ** 14)
+    .times(3)
+    .toFixed(); // NEAR --> 10k picoNEAR conversion
+
+const Game = ({ contract, currentUser }) => {
     const { writeLocalhost, information } = getContext();
     const navigate = useNavigate();
     useEffect(() => {
         writeLocalhost(information);
+        contract.getStorage({ key: currentUser?.accountId }).then((res) => {
+            if (res === 'payment completed') {
+                if (currentUser?.accountId) {
+                    contract.finishGame(
+                        {
+                            amount: Big(1)
+                                .times(10 ** 24)
+                                .times(information.score / 100)
+                                .toFixed(5),
+                        },
+                        ATTACHED_GAS,
+                        0
+                    );
+                }
+            }
+        });
     }, []);
 
     const restartPage = () => {
@@ -49,6 +72,13 @@ const Game = () => {
             </div>
         </section>
     );
+};
+
+Game.propTypes = {
+    contract: PropTypes.any,
+    currentUser: PropTypes.any,
+    nearConfig: PropTypes.any,
+    wallet: PropTypes.any,
 };
 
 export default Game;

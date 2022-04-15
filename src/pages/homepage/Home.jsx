@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Title, MenuButton, Text } from '../../components/';
 import { useNavigate } from 'react-router';
 import { getContext } from '../../context/scoreContext';
@@ -24,6 +24,14 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        contract.getStorage({ key: currentUser?.accountId }).then((res) => {
+            if (res === 'payment completed') {
+                navigate('/game');
+            }
+        });
+    }, []);
+
     const signIn = () => {
         wallet.requestSignIn(
             {
@@ -44,22 +52,12 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
 
     const startGame = async () => {
         if (currentUser?.accountId) {
-            let initializationResult = await contract.initCheck({
-                user: currentUser.accountId,
-            });
-            if (!initializationResult) {
-                await contract.initialize({ user: currentUser.accountId });
-                initializationResult = await contract.initCheck({
-                    user: currentUser.accountId,
-                });
-            }
             await contract.getTicket({}, ATTACHED_GAS, ATTACHED_TOKENS);
-            navigate('/game');
         } else {
             await signIn();
         }
     };
-    console.log(currentUser);
+
     const toggleDifficulty = () => {
         if (name === 'Easy') {
             setDifficulty({ name: 'Medium', value: 1 });
