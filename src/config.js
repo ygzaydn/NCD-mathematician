@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'voidweb.testnet';
+const CONTRACT_NAME = 'nerdkrypto.testnet';
 
 function getConfig(env) {
     switch (env) {

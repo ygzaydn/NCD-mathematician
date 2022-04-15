@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 
 import './home.css';
 
+const DIVIDER = 1000000000000000000000000;
+
 const Home = ({ wallet, nearConfig, contract, currentUser }) => {
     const {
         difficulty: { name },
@@ -27,47 +29,88 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
     };
     const signOut = () => {
         wallet.signOut();
-        window.location.replace(window.location.origin + window.location.pathname);
-      };
-   
+        window.location.replace(
+            window.location.origin + window.location.pathname
+        );
+    };
+
     const startGame = async () => {
         if (currentUser?.accountId) {
             const res = await contract.sayHi();
             console.log(res);
-            navigate('/game');
+            let initializationResult = await contract.initCheck({
+                user: currentUser.accountId,
+            });
+            if (!initializationResult) {
+                await contract.initialize({ user: currentUser.accountId });
+                initializationResult = await contract.initCheck({
+                    user: currentUser.accountId,
+                });
+            }
+            const ticket = await contract.getTicket();
+            if (ticket) {
+                navigate('/game');
+            }
         } else {
             await signIn();
         }
     };
 
     const toggleDifficulty = () => {
-        if(name === 'Easy'){
-            setDifficulty({name: 'Medium', value:1});
+        if (name === 'Easy') {
+            setDifficulty({ name: 'Medium', value: 1 });
         }
-        if(name === 'Medium'){
-            setDifficulty({name: 'Hard', value:2});
+        if (name === 'Medium') {
+            setDifficulty({ name: 'Hard', value: 2 });
         }
-        if(name === 'Hard'){
-            setDifficulty({name: 'Easy', value:0});
+        if (name === 'Hard') {
+            setDifficulty({ name: 'Easy', value: 0 });
         }
     };
 
+    console.log(currentUser);
+
     return (
         <div className="homepage">
-            {currentUser?.accountId && <span className="homepage-logout" onClick={() => signOut()}>Logout</span>}
+            {currentUser?.accountId && (
+                <div className="homepage-logout">
+                    <Text
+                        content={currentUser.accountId}
+                        size="2.5rem"
+                        center="center"
+                    />
+                    <Text
+                        content={`Balance: ${(
+                            currentUser.balance / DIVIDER
+                        ).toFixed(5)} NEAR`}
+                        size="2.5rem"
+                        center="center"
+                    />
+
+                    <MenuButton
+                        text="Logout"
+                        clickFunc={signOut}
+                        width="15rem"
+                        height="10rem"
+                        margin="0"
+                    />
+                </div>
+            )}
             <Text content={`Difficulty: ${name}`} size="4.5rem" />
-            <Text content="Change Difficulty" cursor="pointer" size="2.5rem" clickFunc={toggleDifficulty}/>
+            <Text
+                content="Change Difficulty"
+                cursor="pointer"
+                size="2.5rem"
+                clickFunc={toggleDifficulty}
+            />
             <Title title="Mathematics Game" />
-            {currentUser?.accountId ? (
-                <Text
-                    content={`Hello ${currentUser?.accountId}`}
-                    size="3.5rem"
-                />
-            ) : (
+            {!currentUser?.accountId ? (
                 <Text
                     content="Click button below to connect your wallet"
                     size="3.5rem"
                 />
+            ) : (
+                <Text content="Entrance Ticket: 1 NEAR" size="2.5rem" />
             )}
             <MenuButton
                 text={currentUser?.accountId ? 'Start' : 'Connect wallet'}

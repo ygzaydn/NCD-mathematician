@@ -40,16 +40,23 @@ const Game = () => {
         if (turn >= 11) {
             navigate('/result');
         }
-
         setQuestion(generateQuestion());
     }, [turn]);
 
     useEffect(() => {
         if (question[0] && question[1]) {
             setAnswers(generateAnswers(question));
-            console.log('asd');
         }
     }, [question]);
+
+    useEffect(() => {
+        const timer = () => setTimeout(() => answer(0), 3000);
+        let timerId = timer();
+        if (disabled) {
+            clearTimeout(timerId);
+        }
+        return () => clearTimeout(timerId);
+    }, [disabled]);
 
     const answerChecker = (answer) => {
         return answer === question[0] * question[1];
@@ -59,6 +66,7 @@ const Game = () => {
         const gridInfo = gridRef.current;
         const dialogInfo = dialogRef.current;
         dialogInfo.style.visibility = 'visible';
+        setDisabled(true);
         if (answerChecker(answer)) {
             gridInfo.className = 'gamepage gamepage--correct';
             setCorrect(true);

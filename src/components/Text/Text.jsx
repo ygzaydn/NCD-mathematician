@@ -4,16 +4,25 @@ import PropTypes from 'prop-types';
 import './text.css';
 import { Correct, False } from '../../icons';
 
-const Text = ({ content, size, padding, icon, iconText, cursor, clickFunc }) => (
-    <div className="text">
+const Text = ({
+    content,
+    size,
+    padding,
+    icon,
+    iconText,
+    cursor,
+    clickFunc,
+    center,
+}) => (
+    <div className="text" style={{ justifyContent: center || 'default' }}>
         <h2
             className="text__content"
             style={{
                 fontSize: size || 'default',
                 padding: padding || 'default',
-                cursor: cursor || 'default'
+                cursor: cursor || 'default',
             }}
-            onClick={() => clickFunc()}
+            onClick={() => (clickFunc ? clickFunc() : {})}
         >
             {content}
         </h2>
@@ -32,7 +41,8 @@ Text.propTypes = {
     icon: PropTypes.bool,
     iconText: PropTypes.string,
     cursor: PropTypes.string,
-    clickFunc:PropTypes.func
+    clickFunc: PropTypes.func,
+    center: PropTypes.string,
 };
 
 export default Text;

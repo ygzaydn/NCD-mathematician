@@ -1,37 +1,89 @@
-import { PostedMessage, messages } from './model';
+import {
+    context,
+    logging,
+    PersistentMap,
+    storage,
+    u128,
+    ContractPromiseBatch,
+    ContractPromise,
+} from 'near-sdk-as';
+
+const BASIC_GAS = 5000000000000;
 
 // --- contract code goes below
 
-// The maximum number of latest messages the contract returns.
-const MESSAGE_LIMIT = 10;
+const balances = new PersistentMap<string, u128>('q:');
 
-
-export function sayHi():string {
-  return 'Hello'
+function getBalance(owner: string): u128 {
+    return balances.getSome(owner);
 }
 
-/**
- * Adds a new message under the name of the sender's account id.\
- * NOTE: This is a change method. Which means it will modify the state.\
- * But right now we don't distinguish them with annotations yet.
- */
-export function addMessage(text: string): void {
-  // Creating a new message and populating fields with our data
-  const message = new PostedMessage(text);
-  // Adding the message to end of the persistent collection
-  messages.push(message);
+export function sayHi(): string {
+    return 'Hello';
 }
 
-/**
- * Returns an array of last N messages.\
- * NOTE: This is a view method. Which means it should NOT modify the state.
- */
-export function getMessages(): PostedMessage[] {
-  const numMessages = min(MESSAGE_LIMIT, messages.length);
-  const startIndex = messages.length - numMessages;
-  const result = new Array<PostedMessage>(numMessages);
-  for(let i = 0; i < numMessages; i++) {
-    result[i] = messages[i + startIndex];
-  }
-  return result;
+export function getPredecessor(): string {
+    return context.predecessor;
+}
+
+export function initialize(user: string): void {
+    logging.log('user: ' + user);
+    assert(storage.get<string>(user) == null, 'User is already initialized');
+    const balance = context.accountBalance;
+    balances.set(user, balance);
+    storage.set(user, 'initialization completed');
+}
+
+export function initCheck(user: string): string | null {
+    return storage.get<string>(user);
+}
+
+function xcc__high_level__function_call(
+    remote_account: string,
+    remote_method: string,
+    remote_method_args: string
+): void {
+    const promise = ContractPromise.create(
+        remote_account, // target contract account name
+        remote_method, // target contract method name
+        remote_method_args, // target contract method arguments
+        BASIC_GAS, // gas attached to the call
+        u128.from('10000000000000000000000') // deposit attached to the call
+    );
+
+    promise.returnAsResult(); // return the value of the DataReceipt the client
+}
+
+export function getTicket(): boolean {
+    logging.log(
+        'transfer from: ' +
+            context.sender +
+            ' to: ' +
+            context.contractName +
+            ' amount: 1 NEAR '
+    );
+    const fromAmount = getBalance(context.sender);
+    const price = u128.from('10000000000000000000000');
+
+    assert(
+        fromAmount >= price,
+        'user does not have enough near to participate game'
+    );
+
+    xcc__high_level__function_call(context.contractName, 'getTicket', '');
+
+    /*functionCall(
+        'getTicket',
+        [null],
+        BASIC_GAS,
+        u128.from('10000000000000000000000')
+    );*/
+
+    ContractPromiseBatch.create(context.contractName).transfer(
+        context.attachedDeposit
+    );
+    //createTransaction(context.sender,,"nerdkrypto.testnet",)
+    balances.set(context.sender, u128.sub(fromAmount, price));
+
+    return true;
 }

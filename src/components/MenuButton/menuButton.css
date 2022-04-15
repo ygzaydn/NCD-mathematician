@@ -3,4 +3,6 @@
     background-color: var(--background-primary);
     border: none;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
 }
