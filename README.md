@@ -14,7 +14,7 @@ Main features:
 -   Based on point you get, system will reward you when game is done.
 -   You can check previous results that you have obtained.
 
-Project is powered by Google's Firebase. You can reach the project [here.](ncdmath.web.app)
+Project is powered by Google's Firebase. You can reach the project [here.](https://ncdmath.web.app/)
 
 ## Usage
 
