@@ -18,6 +18,16 @@ const Game = ({ contract, currentUser }) => {
         question: { correct },
     } = readLocalhost();
 
+    const calculateProfit = () => {
+        let profit;
+        if (information.score > 100) {
+            profit = (information.score - 100) / 100;
+        } else {
+            profit = (score - 100) / 100;
+        }
+        return profit;
+    };
+
     useEffect(() => {
         writeLocalhost(information);
 
@@ -29,11 +39,7 @@ const Game = ({ contract, currentUser }) => {
                             {
                                 amount: Big(1)
                                     .times(10 ** 24)
-                                    .times(
-                                        information.score > 0
-                                            ? information.score
-                                            : score / 100
-                                    )
+                                    .times(calculateProfit())
                                     .toFixed(5),
                             },
                             ATTACHED_GAS,
