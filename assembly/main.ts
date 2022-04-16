@@ -43,7 +43,6 @@ export function getTicket(): void {
     );
   
     storage.set(context.sender, 'payment completed');
-  
 }
 
 export function finishGame(amount:u128): void {
@@ -54,8 +53,6 @@ export function finishGame(amount:u128): void {
             context.sender +
             ' amount: ' + amount.toString() +' NEAR '
     );
-
-  
 
     ContractPromiseBatch.create(context.sender).transfer(
         amount
@@ -69,7 +66,5 @@ export function finishGame(amount:u128): void {
         m.set(context.sender, [amount] );
     }
     
-    
-  
     storage.set(context.sender, '');
 }
