@@ -13,3 +13,9 @@
     padding: 2rem 0;
     display: ruby;
 }
+
+@media only screen and (max-width: 1200px) {
+    .title__text {
+        font-size: 6.5rem;
+    }
+}

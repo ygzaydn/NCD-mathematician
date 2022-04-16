@@ -1,7 +1,8 @@
 .menuCircle{
     transition: var(--transition);
     margin: 3rem 0;
-    font-family: 'Handlee', cursive;
+    font-family: 'Oxygen', sans-serif;
+    /*font-family: 'Handlee', cursive;*/
 }
 
 .menuCircle:hover {
@@ -18,3 +19,9 @@
     filter: var(--filter)
 }
 
+@media only screen and (max-width: 1200px) {
+    .answerCircle {
+        max-width: 25vw;
+    }
+    
+}

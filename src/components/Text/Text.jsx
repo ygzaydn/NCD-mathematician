@@ -13,6 +13,9 @@ const Text = ({
     cursor,
     clickFunc,
     center,
+    color,
+    fontWeight,
+    background,
 }) => (
     <div className="text" style={{ justifyContent: center || 'default' }}>
         <h2
@@ -21,6 +24,9 @@ const Text = ({
                 fontSize: size || 'default',
                 padding: padding || 'default',
                 cursor: cursor || 'default',
+                color: color || 'default',
+                fontWeight: fontWeight || 'default',
+                background: background || 'default',
             }}
             onClick={() => (clickFunc ? clickFunc() : {})}
         >
@@ -43,6 +49,9 @@ Text.propTypes = {
     cursor: PropTypes.string,
     clickFunc: PropTypes.func,
     center: PropTypes.string,
+    color: PropTypes.string,
+    fontWeight: PropTypes.string,
+    background: PropTypes.string,
 };
 
 export default Text;

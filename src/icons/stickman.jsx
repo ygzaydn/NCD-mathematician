@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Stickman = ({ text }) => (
+const Stickman = ({ text, height }) => (
     <svg
         width="100%"
-        height="944"
+        height={height || '944'}
         viewBox="0 0 948 944"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -22,6 +22,7 @@ const Stickman = ({ text }) => (
 );
 Stickman.propTypes = {
     text: PropTypes.string,
+    height: PropTypes.string,
 };
 
 export default Stickman;

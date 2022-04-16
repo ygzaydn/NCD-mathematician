@@ -70,13 +70,15 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Handlee', cursive;
+  font-family: 'Oxygen', sans-serif;
+  /*font-family: 'Handlee', cursive;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: 'Handlee', cursive;
+  font-family: 'Oxygen', sans-serif;
+  /*font-family: 'Handlee', cursive;*/
 }
 
 @media screen and (max-width:1250px) {
@@ -89,6 +91,12 @@ code {
 @media screen and (max-width:1000px) {
   html{
     font-size:50%
+  }
+}
+
+@media screen and (max-width:600px) {
+  html{
+    font-size:40%
   }
 }
 

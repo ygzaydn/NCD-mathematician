@@ -9,8 +9,8 @@ const MenuButton = ({ text, clickFunc, width, height, margin }) => (
         <button className="menuButton" onClick={() => clickFunc()}>
             <MenuCircle
                 color="white"
-                width={width || '35rem'}
-                height={height || '10rem'}
+                width={width || '30rem'}
+                height={height || '8rem'}
                 text={text}
                 margin={margin}
             />

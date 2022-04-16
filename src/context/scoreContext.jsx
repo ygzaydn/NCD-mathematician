@@ -7,7 +7,6 @@ const initialState = {
         correct: 0,
     },
     score: 0,
-    summary: [],
 };
 
 export const ScoreContext = React.createContext(null);
@@ -25,6 +24,10 @@ export const ScoreContextProvider = ({ children }) => {
         }
     }, []);
 
+    const resetLocalhost = () => {
+        localStorage.setItem('scoretable', JSON.stringify(initialState));
+    };
+
     const readLocalhost = () => {
         const data = localStorage.getItem('scoretable');
         if (data) {
@@ -33,18 +36,19 @@ export const ScoreContextProvider = ({ children }) => {
     };
 
     const writeLocalhost = (item) => {
-        const data = JSON.parse(localStorage.getItem('scoretable'));
+        if (item.score > 0) {
+            const data = JSON.parse(localStorage.getItem('scoretable'));
 
-        const dataToWrite = {
-            ...data,
-            score: data.score + item.score,
-            question: {
-                total: data.question.total + item.question.total,
-                correct: data.question.correct + item.question.correct,
-            },
-            summary: [...item.summary],
-        };
-        localStorage.setItem('scoretable', JSON.stringify(dataToWrite));
+            const dataToWrite = {
+                ...data,
+                score: data.score + item.score,
+                question: {
+                    total: item.question.total,
+                    correct: item.question.correct,
+                },
+            };
+            localStorage.setItem('scoretable', JSON.stringify(dataToWrite));
+        }
     };
 
     const shuffleArray = (array) => {
@@ -107,6 +111,7 @@ export const ScoreContextProvider = ({ children }) => {
         writeLocalhost,
         generateQuestion,
         generateAnswers,
+        resetLocalhost,
     };
 
     return (

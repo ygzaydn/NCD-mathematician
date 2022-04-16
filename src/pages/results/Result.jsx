@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Text, Title, MenuButton } from '../../components';
 import { getContext } from '../../context/scoreContext';
@@ -6,32 +6,45 @@ import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 import './result.css';
-
-const ATTACHED_GAS = Big(1)
-    .times(10 ** 14)
-    .times(3)
-    .toFixed(); // NEAR --> 10k picoNEAR conversion
+import { ATTACHED_GAS, DIVIDER } from '../../constants';
 
 const Game = ({ contract, currentUser }) => {
-    const { writeLocalhost, information } = getContext();
+    const [prevRuns, setPrevRuns] = useState([]);
+    const { writeLocalhost, information, readLocalhost } = getContext();
     const navigate = useNavigate();
+    const {
+        question: { total },
+        score,
+        question: { correct },
+    } = readLocalhost();
+
     useEffect(() => {
         writeLocalhost(information);
+
         contract.getStorage({ key: currentUser?.accountId }).then((res) => {
             if (res === 'payment completed') {
-                if (currentUser?.accountId) {
-                    contract.finishGame(
-                        {
-                            amount: Big(1)
-                                .times(10 ** 24)
-                                .times(information.score / 100)
-                                .toFixed(5),
-                        },
-                        ATTACHED_GAS,
-                        0
-                    );
-                }
+                setTimeout(() => {
+                    if (currentUser?.accountId) {
+                        contract.finishGame(
+                            {
+                                amount: Big(1)
+                                    .times(10 ** 24)
+                                    .times(
+                                        information.score > 0
+                                            ? information.score
+                                            : score / 100
+                                    )
+                                    .toFixed(5),
+                            },
+                            ATTACHED_GAS,
+                            0
+                        );
+                    }
+                }, 3000);
             }
+        });
+        getMap().then((res) => {
+            setPrevRuns([...res]);
         });
     }, []);
 
@@ -39,36 +52,49 @@ const Game = ({ contract, currentUser }) => {
         navigate('/');
     };
 
+    const getMap = async () =>
+        await contract.getMap({ key: currentUser.accountId });
+
     return (
         <section className="resultpage">
             <div className="resultpage__leftgrid">
                 <Title title="Final" smallUnderline />
                 <Text
-                    content={`Point: ${information.score}`}
+                    content={`Point: ${score}`}
                     padding="1rem 0"
+                    size="4rem"
                 />
                 <Text
-                    content={`Questions: ${information.question.total}`}
+                    content={`Questions: ${total}`}
                     padding="1rem 0"
+                    size="4rem"
                 />
                 <Text
-                    content={`Correct Answer: ${information.question.correct}`}
+                    content={`Correct Answer: ${correct}`}
                     padding="1rem 0"
+                    size="4rem"
                 />
                 <MenuButton text="Restart" clickFunc={() => restartPage()} />
             </div>
             <div className="resultpage__rightgrid">
-                <Title title="All Question" smallUnderline />
-                {information.summary.map((el, ind) => (
+                <Title title="Previous Records" smallUnderline />
+                {!prevRuns.length ? (
                     <Text
-                        content={el.question}
-                        padding=".5rem 0"
-                        size="4.5rem"
-                        icon
-                        iconText={el.answer ? 'correct' : 'false'}
-                        key={ind}
+                        content="No previous record found"
+                        padding="1rem 0"
+                        size="4rem"
                     />
-                ))}
+                ) : (
+                    <>
+                        {prevRuns.map((el, ind) => (
+                            <Text
+                                key={el + ind}
+                                content={`+${(el / DIVIDER).toFixed(4)} NEAR`}
+                                size="2rem"
+                            />
+                        ))}
+                    </>
+                )}
             </div>
         </section>
     );

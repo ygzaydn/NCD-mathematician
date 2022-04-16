@@ -93,3 +93,16 @@
 }
 
 
+
+@media only screen and (max-width: 1200px) {
+    .gamepage{
+        width: 100vw;
+    }
+    .gamepage__lower{
+        flex-direction: column;
+    }
+    .gamepage__right--down{
+        width: 100%;
+    }
+    
+}

@@ -19,6 +19,8 @@ const AnswerButton = ({ info, ind, clickFunc, disabled, correct }) => {
                         pos={ind + 1}
                         disabled={disabled}
                         onClick={() => (!disabled ? clickFunc(info) : null)}
+                        width="18rem"
+                        height="16.4rem"
                     />
                 </button>
             )}

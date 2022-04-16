@@ -3,28 +3,21 @@ import { Title, MenuButton, Text } from '../../components/';
 import { useNavigate } from 'react-router';
 import { getContext } from '../../context/scoreContext';
 import PropTypes from 'prop-types';
-import Big from 'big.js';
+import { DIVIDER, ATTACHED_GAS, ATTACHED_TOKENS } from '../../constants';
 
 import './home.css';
-
-const DIVIDER = 1000000000000000000000000;
-const ATTACHED_GAS = Big(1)
-    .times(10 ** 14)
-    .times(3)
-    .toFixed(); // NEAR --> 10k picoNEAR conversion
-const ATTACHED_TOKENS = Big(1)
-    .times(10 ** 24)
-    .toFixed(); // NEAR --> yoctoNEAR conversion
 
 const Home = ({ wallet, nearConfig, contract, currentUser }) => {
     const {
         difficulty: { name },
         setDifficulty,
+        resetLocalhost,
     } = getContext();
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        resetLocalhost();
         contract.getStorage({ key: currentUser?.accountId }).then((res) => {
             if (res === 'payment completed') {
                 navigate('/game');
@@ -43,6 +36,7 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
             null
         );
     };
+
     const signOut = () => {
         wallet.signOut();
         window.location.replace(
@@ -90,19 +84,13 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
                     <MenuButton
                         text="Logout"
                         clickFunc={signOut}
-                        width="15rem"
-                        height="10rem"
-                        margin="0"
+                        width="20rem"
+                        height="6rem"
+                        margin="1rem 0"
                     />
                 </div>
             )}
-            <Text content={`Difficulty: ${name}`} size="4.5rem" />
-            <Text
-                content="Change Difficulty"
-                cursor="pointer"
-                size="2.5rem"
-                clickFunc={toggleDifficulty}
-            />
+
             <Title title="Mathematics Game" />
             {!currentUser?.accountId ? (
                 <Text
@@ -116,10 +104,24 @@ const Home = ({ wallet, nearConfig, contract, currentUser }) => {
                 text={currentUser?.accountId ? 'Start' : 'Connect wallet'}
                 clickFunc={() => startGame()}
             />
-            <Text content="How to play?" size="3rem" />
+            {currentUser?.accountId && (
+                <>
+                    <Text content={`Difficulty: ${name}`} size="4.5rem" />
+                    <Text
+                        content="Change Difficulty"
+                        cursor="pointer"
+                        size="2.5rem"
+                        clickFunc={toggleDifficulty}
+                        color="white"
+                        background="red"
+                    />
+                </>
+            )}
+            <Text content="How to play?" size="3rem" color="yellow" />
             <Text
                 content="As you click start game, you'll pay some amount of NEAR to get a ticket. Later than that you'll be asked some math questions, by giving them correct answer you'll get points. When game ends, amount of score you obtain will decide the amount of NEAR you'll gain. As you increase the difficulty, you can have more score, but questions will be much more harder."
                 size="2.25rem"
+                fontWeight="200"
             />
         </div>
     );

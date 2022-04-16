@@ -28,3 +28,30 @@ background-color: red;
     fill: black !important
 }
 
+
+@media only screen and (max-width: 1200px) {
+    .answerButton {
+        background-color: transparent;
+        border: none;
+        position: inherit;
+        height: auto;
+        width: auto;
+        
+    }
+    
+    .answerButton1 {
+        top:0;
+        left:0;
+    }
+    
+    .answerButton2 {
+        top:0;
+        left:0;
+    }
+    
+    .answerButton3 {
+        top:0;
+        left:0;
+    }
+    
+}
