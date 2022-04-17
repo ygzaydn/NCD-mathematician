@@ -19,11 +19,13 @@ const Game = ({ contract, currentUser }) => {
     } = readLocalhost();
 
     const calculateProfit = () => {
-        let profit;
+        let profit = 0;
         if (information.score > 100) {
             profit = (information.score - 100) / 100;
-        } else {
+        } else if (score > 0) {
             profit = (score - 100) / 100;
+        } else {
+            profit = 0.25;
         }
         return profit;
     };
