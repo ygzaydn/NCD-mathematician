@@ -2,7 +2,7 @@
 
 ## About the project
 
-> Near dAPP that give prizes competitors who have high score.
+> Near APP that give prizes competitors who have high score.
 
 NCD Mathematician is a Near app (whose frontend is powered by React) that ask you math question depends on difficulty and give rewards based on score you get.
 
